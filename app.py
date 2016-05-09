@@ -89,7 +89,7 @@ def fget_post_all(user):
         post.append(len(comments))
         post.append(comments)
         if post[5] == "__empty__":
-            post[5] = "../static/pictures/profile-img.jpg"
+            post[5] = "{{ url_for('static', filename='pictures/profile-img.jpg') }}"
     return posts
 
 
