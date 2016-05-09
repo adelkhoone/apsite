@@ -93,6 +93,8 @@ get_reply_all(reply_comment)                                              return
 
 get_users(pattern)                                                        return all users with specific pattern
 
+forget_pass_user(username)                                                return username password and email in case of forget_pass
+
 IMPORTANT NOTE:
     likepost
     comment_post
@@ -973,6 +975,26 @@ def get_users(pattern):
         return []
 
 
+def forget_pass_user(username):
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    cursor = db.cursor()
+    sql = "SELECT username,password,email FROM users WHERE username = '%s'" %username
+    try:
+        cursor.execute(sql)
+        data = cursor.fetchone()
+        db.commit()
+    except:
+        db.rollback()
+        print "invalid user"
+        return False
+    db.close()
+    try:
+        return data
+    except:
+        return []
+
+
+
 
 #print sign_up('a','asc','sacsc','sacccccccc')
 #print sign_up('b','assc','ssacaaaasc')
@@ -1082,3 +1104,4 @@ def get_users(pattern):
 
 #print sign_up('wsdvwwdvvvvw','asascc','sacwascwwsc','sacccccccc')
 #print get_users("w")
+#print forget_pass_user("ww")
