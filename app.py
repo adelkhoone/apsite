@@ -1,8 +1,9 @@
 __author__ = 'sargdsra'
 
-from flask import Flask, render_template, request, session
-from DATABASE import sign_in, sign_up, followers, followings, posting, get_post_all, get_comment_all, like_post, \
-    get_users, dislike_post
+from flask import Flask, render_template, request
+
+from src.DATABASE import sign_in, sign_up, followers, followings, posting, get_post_all, get_comment_all, like_post, \
+    get_users, dislike_post, commenting
 
 app = Flask(__name__)
 app.secret_key = 'amir'
@@ -77,6 +78,17 @@ def fdlike(user, pi):
     return render_template("main-page.html")
 
 
+@app.route('/cm/<int:pi>/<string:user>', methods=['POST'])
+def fcm(pi, user):
+    com = str(request.form['comment'])
+    if commenting(pi, user, com):
+        follow = len(followers(user))
+        followi = len(followings(user))
+        posts = fget_post_all(user)
+        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts)
+    return render_template("main-page.html")
+
+
 def fget_post_all(user):
     posts = get_post_all(user)
     followi = followings(user)
@@ -89,7 +101,8 @@ def fget_post_all(user):
         post.append(len(comments))
         post.append(comments)
         if post[5] == "__empty__":
-            post[5] = "{{ url_for('static', filename='pictures/profile-img.jpg') }}"
+            post[5] = "../static/pictures/profile-img.jpg"
+    print posts
     return posts
 
 
