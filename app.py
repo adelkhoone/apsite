@@ -40,13 +40,8 @@ def signin():
     user = str(request.form['Username'])
     password = str(request.form['Password'])
     if sign_in(user, password):
-        follow = len(followers(user))
-        followi = len(followings(user))
         posts = fget_post_all(user)
-        p = get_users(user)[0][-1]
-        if p == "__empty__":
-            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
+        return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
 
 
@@ -71,26 +66,16 @@ def fpost(user):
 @app.route('/like/<string:user>/<int:pi>', methods=["POST", "GET"])
 def flike(user, pi):
     if like_post(pi, user) or get_users(user):
-        follow = len(followers(user))
-        followi = len(followings(user))
         posts = fget_post_all(user)
-        p = get_users(user)[0][-1]
-        if p == "__empty__":
-            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
+        return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
 
 
 @app.route('/dlike/<string:user>/<int:pi>', methods=["POST", "GET"])
 def fdlike(user, pi):
     if dislike_post(pi, user) or get_users(user):
-        follow = len(followers(user))
-        followi = len(followings(user))
         posts = fget_post_all(user)
-        p = get_users(user)[0][-1]
-        if p == "__empty__":
-            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
+        return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
 
 
@@ -98,15 +83,30 @@ def fdlike(user, pi):
 def fcm(pi, user):
     com = str(request.form['comment'])
     if commenting(pi, user, com):
-        follow = len(followers(user))
-        followi = len(followings(user))
         posts = fget_post_all(user)
-        p = get_users(user)[0][-1]
-        if p == "__empty__":
-            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
+        return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
 
+
+@app.route('/h/<string:user>', methods=['POST', 'GET'])
+def fhome(user):
+    # if have_user(user):
+    posts = fget_post_all(user)
+    return render_template("home.html", posts=posts, Username=user)
+    # return render_template("main-page.html")
+
+
+@app.route('/p/<string:user>', methods=['POST', 'GET'])
+def fpro(user):
+    # if have_user(user):
+    follow = len(followers(user))
+    followi = len(followings(user))
+    posts = fget_post_all(user)
+    p = get_users(user)[0][-1]
+    if p == "__empty__":
+        p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+    return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
+    # return render_template("main-page.html")
 
 def fget_post_all(user):
     posts = get_post_all(user)
@@ -116,7 +116,7 @@ def fget_post_all(user):
             posts += get_post_all(uf)
     posts = fdate_sort(posts)
     for post in posts:
-        comments1 = list(get_comment_all(post[0]))[::-1]
+        comments1 = list(get_comment_all(post[0]))
         comments = [list(i) for i in comments1]
         for comment in comments:
             l = get_users(comment[2])[0][-1]

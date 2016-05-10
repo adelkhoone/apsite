@@ -217,13 +217,14 @@ body{
       <a class="navbar-brand" href="#">Iran Social Network</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
+      <li class="active"><a href="/h/{{ Username }}" methods="get" >Home</a></li>
+        <li class="active"><a href="/p/{{ Username }}" methods="get">Profile</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li></ul></div></nav>
 
         <div class="chip" style="margin:left;">
-          <img src="{{ url_for('static', filename='pictures/profile-img.jpg') }}" alt="Person" width="96" height="96">
+          <img src="{{ pic }}" alt="Person" width="96" height="96">
           Username
         </div>
 <center>
