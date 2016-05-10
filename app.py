@@ -3,7 +3,9 @@ __author__ = 'sargdsra'
 from flask import Flask, render_template, request
 
 from src.DATABASE import sign_in, sign_up, followers, followings, posting, get_post_all, get_comment_all, like_post, \
-    get_users, dislike_post, commenting
+    get_users, dislike_post, commenting, get_users
+
+from mailing_welcom import mailing_welcome
 
 app = Flask(__name__)
 app.secret_key = 'amir'
@@ -27,7 +29,9 @@ def signup():
     email = str(request.form['Email'])
     if rep == password and email.count("@") == 1:
         if sign_up(user, password, email):
-            return render_template("profile.html", Username=user, followers=0, following=0)
+            mailing_welcome(email, user)
+        return render_template("profile.html", Username=user, followers=0, following=0,
+                               pic="http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg")
     return render_template("main-page.html")
 
 
@@ -39,7 +43,10 @@ def signin():
         follow = len(followers(user))
         followi = len(followings(user))
         posts = fget_post_all(user)
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts)
+        p = get_users(user)[0][-1]
+        if p == "__empty__":
+            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
     return render_template("main-page.html")
 
 
@@ -54,7 +61,10 @@ def fpost(user):
         follow = len(followers(user))
         followi = len(followings(user))
         posts = fget_post_all(user)
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts)
+        p = get_users(user)[0][-1]
+        if p == "__empty__":
+            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
     return render_template("main-page.html")
 
 
@@ -64,7 +74,10 @@ def flike(user, pi):
         follow = len(followers(user))
         followi = len(followings(user))
         posts = fget_post_all(user)
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts)
+        p = get_users(user)[0][-1]
+        if p == "__empty__":
+            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
     return render_template("main-page.html")
 
 
@@ -74,7 +87,10 @@ def fdlike(user, pi):
         follow = len(followers(user))
         followi = len(followings(user))
         posts = fget_post_all(user)
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts)
+        p = get_users(user)[0][-1]
+        if p == "__empty__":
+            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
     return render_template("main-page.html")
 
 
@@ -85,7 +101,10 @@ def fcm(pi, user):
         follow = len(followers(user))
         followi = len(followings(user))
         posts = fget_post_all(user)
-        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts)
+        p = get_users(user)[0][-1]
+        if p == "__empty__":
+            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
     return render_template("main-page.html")
 
 
@@ -97,12 +116,17 @@ def fget_post_all(user):
             posts += get_post_all(uf)
     posts = fdate_sort(posts)
     for post in posts:
-        comments = list(get_comment_all(post[0]))[::-1]
+        comments1 = list(get_comment_all(post[0]))[::-1]
+        comments = [list(i) for i in comments1]
+        for comment in comments:
+            l = get_users(comment[2])[0][-1]
+            if l == "__empty__":
+                l = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+            comment.append(l)
         post.append(len(comments))
         post.append(comments)
         if post[5] == "__empty__":
-            post[5] = "../static/pictures/profile-img.jpg"
-    print posts
+            post[5] = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
     return posts
 
 
