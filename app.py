@@ -4,7 +4,7 @@ from flask import Flask, render_template, request
 
 from src.DATABASE import sign_in, sign_up, followers, followings, posting, get_post_all, get_comment_all, like_post, \
     dislike_post, commenting, get_users, get_photo_profile, get_reply_all, like_comment, dislike_comment, like_reply, \
-    dislike_reply, replying
+    dislike_reply, replying, edit_post_text, delete_post
 
 import MySQLdb
 
@@ -58,7 +58,7 @@ def fpost(user):
     if posting(user, str(request.form['post_text'])):
         follow = len(followers(user))
         followi = len(followings(user))
-        posts = fget_post_all(user)
+        posts = foget_post_all(user)
         p = get_photo_profile(user)
         if p == "__empty__":
             p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
@@ -109,7 +109,7 @@ def fpro(user):
     if get_photo_profile(user):
         follow = len(followers(user))
         followi = len(followings(user))
-        posts = fget_post_all(user)
+        posts = foget_post_all(user)
         p = get_photo_profile(user)
         if p == "__empty__":
             p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
@@ -156,13 +156,31 @@ def frdlike(user, ri):
 @app.route('/rep/<int:ci>/<string:user>/<int:pi>', methods=['POST'])
 def frep(ci, user, pi):
     rep = MySQLdb.escape_string(request.form['reply'])
-    print rep
     user = MySQLdb.escape_string(user)
     if replying(ci, user, pi, rep):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
 
+
+@app.route('/ep/<int:pi>/<string:user>', methods=['POST'])
+def fedit_p(pi, user):
+    np = MySQLdb.escape_string(request.form['new_p'])
+    user = MySQLdb.escape_string(user)
+    if edit_post_text(pi, np, user):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
+
+
+@app.route('/dp/<int:pi>/<string:user>', methods=['GET'])
+def fdel_p(pi, user):
+    user = MySQLdb.escape_string(user)
+    if delete_post(pi, user):
+        print "abc"
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
 
 def fget_post_all(user):
     user = MySQLdb.escape_string(user)
@@ -192,9 +210,33 @@ def fget_post_all(user):
         post.append(comments)
         if post[5] == "__empty__":
             post[5] = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
-    print posts
     return posts
 
+def foget_post_all(user):
+    user = MySQLdb.escape_string(user)
+    posts = get_post_all(user)
+    posts = fdate_sort(posts)
+    for post in posts:
+        comments1 = list(get_comment_all(post[0]))
+        comments = [list(i) for i in comments1]
+        for comment in comments:
+            l = get_photo_profile(comment[2])
+            if l == "__empty__":
+                l = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+            comment.append(l)
+            reply1 = list(get_reply_all(comment[0]))
+            reply = [list(i) for i in reply1]
+            for rep in reply:
+                lr = get_photo_profile(rep[2])
+                if lr == "__empty__":
+                    lr = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+                rep.append(lr)
+            comment.append(reply)
+        post.append(len(comments))
+        post.append(comments)
+        if post[5] == "__empty__":
+            post[5] = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+    return posts
 
 def fdate_sort(p):
     pl = [list(i) for i in p]
