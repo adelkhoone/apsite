@@ -3,7 +3,10 @@ __author__ = 'sargdsra'
 from flask import Flask, render_template, request
 
 from src.DATABASE import sign_in, sign_up, followers, followings, posting, get_post_all, get_comment_all, like_post, \
-    get_users, dislike_post, commenting, get_users
+    dislike_post, commenting, get_users, get_photo_profile, get_reply_all, like_comment, dislike_comment, like_reply, \
+    dislike_reply, replying
+
+import MySQLdb
 
 from mailing_welcom import mailing_welcome
 
@@ -23,22 +26,22 @@ def login():
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    user = str(request.form['Username'])
-    password = str(request.form['Password'])
-    rep = str(request.form['Re-password'])
-    email = str(request.form['Email'])
+    user = MySQLdb.escape_string(request.form['Username'])
+    password = MySQLdb.escape_string(request.form['Password'])
+    rep = MySQLdb.escape_string(request.form['Re-password'])
+    email = MySQLdb.escape_string(request.form['Email'])
     if rep == password and email.count("@") == 1:
         if sign_up(user, password, email):
             mailing_welcome(email, user)
-        return render_template("profile.html", Username=user, followers=0, following=0,
-                               pic="http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg")
+            return render_template("profile.html", Username=user, followers=0, following=0,
+                                   pic="http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg")
     return render_template("main-page.html")
 
 
 @app.route('/signin', methods=['POST'])
 def signin():
-    user = str(request.form['Username'])
-    password = str(request.form['Password'])
+    user = MySQLdb.escape_string(request.form['Username'])
+    password = MySQLdb.escape_string(request.form['Password'])
     if sign_in(user, password):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -56,7 +59,7 @@ def fpost(user):
         follow = len(followers(user))
         followi = len(followings(user))
         posts = fget_post_all(user)
-        p = get_users(user)[0][-1]
+        p = get_photo_profile(user)
         if p == "__empty__":
             p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
         return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
@@ -65,7 +68,8 @@ def fpost(user):
 
 @app.route('/like/<string:user>/<int:pi>', methods=["POST", "GET"])
 def flike(user, pi):
-    if like_post(pi, user) or get_users(user):
+    user = MySQLdb.escape_string(user)
+    if like_post(pi, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
@@ -73,7 +77,8 @@ def flike(user, pi):
 
 @app.route('/dlike/<string:user>/<int:pi>', methods=["POST", "GET"])
 def fdlike(user, pi):
-    if dislike_post(pi, user) or get_users(user):
+    user = MySQLdb.escape_string(user)
+    if dislike_post(pi, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
@@ -81,7 +86,8 @@ def fdlike(user, pi):
 
 @app.route('/cm/<int:pi>/<string:user>', methods=['POST'])
 def fcm(pi, user):
-    com = str(request.form['comment'])
+    com = MySQLdb.escape_string(request.form['comment'])
+    user = MySQLdb.escape_string(user)
     if commenting(pi, user, com):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -90,25 +96,76 @@ def fcm(pi, user):
 
 @app.route('/h/<string:user>', methods=['POST', 'GET'])
 def fhome(user):
-    # if have_user(user):
-    posts = fget_post_all(user)
-    return render_template("home.html", posts=posts, Username=user)
-    # return render_template("main-page.html")
+    user = MySQLdb.escape_string(user)
+    if get_photo_profile(user):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
 
 
 @app.route('/p/<string:user>', methods=['POST', 'GET'])
 def fpro(user):
-    # if have_user(user):
-    follow = len(followers(user))
-    followi = len(followings(user))
-    posts = fget_post_all(user)
-    p = get_users(user)[0][-1]
-    if p == "__empty__":
-        p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
-    return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
-    # return render_template("main-page.html")
+    user = MySQLdb.escape_string(user)
+    if get_photo_profile(user):
+        follow = len(followers(user))
+        followi = len(followings(user))
+        posts = fget_post_all(user)
+        p = get_photo_profile(user)
+        if p == "__empty__":
+            p = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+        return render_template("profile.html", Username=user, followers=follow, following=followi, posts=posts, pic=p)
+    return render_template("main-page.html")
+
+
+@app.route('/clike/<string:user>/<int:ci>', methods=['POST', 'GET'])
+def fclike(user, ci):
+    user = MySQLdb.escape_string(user)
+    if like_comment(ci, user) or get_photo_profile(user):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
+
+
+@app.route('/cdlike/<string:user>/<int:ci>', methods=['POST', 'GET'])
+def fcdlike(user, ci):
+    user = MySQLdb.escape_string(user)
+    if dislike_comment(ci, user) or get_photo_profile(user):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
+
+
+@app.route('/rlike/<string:user>/<int:ri>', methods=['POST', 'GET'])
+def frlike(user, ri):
+    user = MySQLdb.escape_string(user)
+    if like_reply(ri, user) or get_photo_profile(user):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
+
+
+@app.route('/rdlike/<string:user>/<int:ri>', methods=['POST', 'GET'])
+def frdlike(user, ri):
+    user = MySQLdb.escape_string(user)
+    if dislike_reply(ri, user) or get_photo_profile(user):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
+
+
+@app.route('/rep/<int:ci>/<string:user>/<int:pi>', methods=['POST'])
+def frep(ci, user, pi):
+    rep = MySQLdb.escape_string(request.form['reply'])
+    print rep
+    user = MySQLdb.escape_string(user)
+    if replying(ci, user, pi, rep):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
+
 
 def fget_post_all(user):
+    user = MySQLdb.escape_string(user)
     posts = get_post_all(user)
     followi = followings(user)
     if len(followi) > 0:
@@ -119,14 +176,23 @@ def fget_post_all(user):
         comments1 = list(get_comment_all(post[0]))
         comments = [list(i) for i in comments1]
         for comment in comments:
-            l = get_users(comment[2])[0][-1]
+            l = get_photo_profile(comment[2])
             if l == "__empty__":
                 l = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
             comment.append(l)
+            reply1 = list(get_reply_all(comment[0]))
+            reply = [list(i) for i in reply1]
+            for rep in reply:
+                lr = get_photo_profile(rep[2])
+                if lr == "__empty__":
+                    lr = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+                rep.append(lr)
+            comment.append(reply)
         post.append(len(comments))
         post.append(comments)
         if post[5] == "__empty__":
             post[5] = "http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg"
+    print posts
     return posts
 
 
