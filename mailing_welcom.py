@@ -5,7 +5,7 @@ from email.MIMEBase import MIMEBase
 from email import encoders
 
 def mailing_welcome(email, username):
-    fromaddr = "alialirezaamirap@gmail.com"
+    fromaddr = "iransocialnetwork.adm@gmail.com"
     toaddr = email
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -23,10 +23,10 @@ def mailing_welcome(email, username):
     msg.attach(part)
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(fromaddr, "alialirezaamirap7676")
+    server.login(fromaddr, "iransocialnetwork.adm7676")
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
 
 
-mailing_welcome("sargdsra@gmail.com", "daus")
+#mailing_welcome("sargdsra@gmail.com", "daus")
