@@ -4,11 +4,12 @@ from flask import Flask, render_template, request
 
 from src.DATABASE import sign_in, sign_up, followers, followings, posting, get_post_all, get_comment_all, like_post, \
     dislike_post, commenting, get_users, get_photo_profile, get_reply_all, like_comment, dislike_comment, like_reply, \
-    dislike_reply, replying, edit_post_text, delete_post
+    dislike_reply, replying, edit_post_text, delete_post, update_password, forget_pass_user
 
 import MySQLdb
 
 from mailing_welcom import mailing_welcome
+from forget_password import forget_pass
 
 app = Flask(__name__)
 app.secret_key = 'amir'
@@ -177,10 +178,42 @@ def fedit_p(pi, user):
 def fdel_p(pi, user):
     user = MySQLdb.escape_string(user)
     if delete_post(pi, user):
-        print "abc"
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
     return render_template("main-page.html")
+
+
+@app.route('/change_p')
+def cp():
+    return render_template("reset-password.html")
+
+
+@app.route('/change_pass', methods=['POST'])
+def ch_pass():
+    user = MySQLdb.escape_string(request.form['Username'])
+    b_pass = MySQLdb.escape_string(request.form['opass'])
+    n_pass = MySQLdb.escape_string(request.form['npass'])
+    if update_password(user, b_pass, n_pass):
+        posts = fget_post_all(user)
+        return render_template("home.html", posts=posts, Username=user)
+    return render_template("main-page.html")
+
+
+@app.route('/fp')
+def ffp():
+    return render_template("forget-pass.html")
+
+
+@app.route('/mail_p', methods=['POST'])
+def mail_pass():
+    user = MySQLdb.escape_string(request.form['Username'])
+    inf = forget_pass_user(user)
+    if inf:
+        forget_pass(inf[2], inf[0], inf[1])
+    return render_template("main-page.html")
+
+
+
 
 def fget_post_all(user):
     user = MySQLdb.escape_string(user)
