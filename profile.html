@@ -255,7 +255,13 @@ hr{
   transform: translateY(4px);
 }
 
-
+input[type=text] {
+  width: 80px;
+  -webkit-transition: width .35s ease-in-out;
+  transition: width .35s ease-in-out;
+}
+input[type=text]:focus {
+  width: 165px;
 }
 </style>
 <head>
@@ -278,7 +284,11 @@ hr{
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li></ul></div></nav>
-<br><div id="search_panel" class="chip" style="border-radius:2px;margin-top:0.1cm;margin:left;height:600px;width:300px;">
+<br><div id="search_panel" class="chip" style="border-radius:2px;margin-top:0.1cm;margin:left;height:58px;width:300px;overflow:auto;"><input type="text" name="search" style = "margin-left:0.2cm;height:30px;" placeholder="search..."><button class='button4'>Search</button>
+
+
+
+</div><br><br><br><div id="search_panel" class="chip" style="border-radius:2px;margin-top:0.1cm;margin:left;height:600px;width:300px;">
 <center><h2>Find Your Friends</h2></center>
 <p><img src="{{ pic }}" alt="profile image " style="width:50px;height:50px;border-radius:100px;margin-left:0.3cm;"></img>ali abdollahi</p><center><button class='button4'>Follow</button></center><hr>
 <p><img src="{{ pic }}" alt="profile image " style="width:50px;height:50px;border-radius:100px;margin-left:0.3cm;"></img>ali abdollahi</p><center><button class='button4'>Follow</button></center><hr>
