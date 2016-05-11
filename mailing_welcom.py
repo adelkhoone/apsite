@@ -19,7 +19,7 @@ def mailing_welcome(email, username):
                "will be used for recovering password " % (username, username)
         msg.attach(MIMEText(smart_str(body), 'plain'))
         filename = "logo.png"
-        attachment = open("logo.png", "rb")
+        attachment = open("static\pictures\logo.png", "rb")
         part = MIMEBase('application', 'octet-stream')
         part.set_payload((attachment).read())
         encoders.encode_base64(part)

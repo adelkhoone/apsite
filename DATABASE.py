@@ -110,7 +110,7 @@ IMPORTANT NOTE:
 
 
 import MySQLdb
-
+from django.utils.encoding import smart_str
 
 def sign_up(username, password, email, photo="__empty__"):
     db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
@@ -249,7 +249,7 @@ def update_password(username, password, new_pass):
 def posting(username_post, post, photo="__empty__"):
     db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
-    sql = "INSERT INTO posts (username_post,post,date_mod,photo_post) VALUES ('%s' , '%s', NOW(), '%s')" % (username_post, post, photo)
+    sql = "INSERT INTO posts (username_post,post,date_mod,photo_post) VALUES ('%s' , '%s', NOW(), '%s')" % (username_post, post.decode('utf-8'), photo)
     flag = False
     try:
         cursor.execute(sql)
@@ -497,7 +497,7 @@ def like_post_calculator(post_id):
 def commenting(comment_post, comment_username, comment):
     db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
-    sql = "INSERT INTO comments (comment_post,comment_username,comment,comment_date) VALUES ('%d' , '%s', '%s', NOW())" % (comment_post, comment_username, comment)
+    sql = "INSERT INTO comments (comment_post,comment_username,comment,comment_date) VALUES ('%d' , '%s', '%s', NOW())" % (comment_post, comment_username, comment.decode('utf-8'))
     flag = False
     try:
         cursor.execute(sql)
@@ -685,7 +685,7 @@ def like_cm_calculator(comment_id):
 def replying(reply_comment, reply_username, reply_post, reply):
     db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
-    sql = "INSERT INTO replys (reply_comment,reply_username, reply_post,reply,reply_date) VALUES ('%d' , '%s', '%s','%s', NOW())" % (reply_comment, reply_username, reply_post, reply)
+    sql = "INSERT INTO replys (reply_comment,reply_username, reply_post,reply,reply_date) VALUES ('%d' , '%s', '%s','%s', NOW())" % (reply_comment, reply_username, reply_post, reply.decode('utf-8'))
     flag = False
     try:
         cursor.execute(sql)
