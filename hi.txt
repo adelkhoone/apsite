@@ -1,1 +1,0 @@
-<img src="profile-img.jpg" align="left" alt="profile image " style="width:30px;height:30px;border-radius:100px;margin-top:-0.2cm;"></img><p align="left" style:"margin-bottom:-1cm;">Username | '+Date()+'</p><hr><br><p align="left" style="margin-left:1cm;">'+document.getElementById("post_cm").value+'<hr style="height:5px;"></p>
