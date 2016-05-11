@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __author__ = 'sargdsra'
 
 from flask import Flask, render_template, request
@@ -10,6 +11,7 @@ import MySQLdb
 
 from mailing_welcom import mailing_welcome
 from forget_password import forget_pass
+from django.utils.encoding import smart_str
 
 app = Flask(__name__)
 app.secret_key = 'amir'
@@ -27,22 +29,22 @@ def login():
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    user = MySQLdb.escape_string(request.form['Username'])
-    password = MySQLdb.escape_string(request.form['Password'])
-    rep = MySQLdb.escape_string(request.form['Re-password'])
-    email = MySQLdb.escape_string(request.form['Email'])
+    user = MySQLdb.escape_string(smart_str(request.form['Username']))
+    password = MySQLdb.escape_string(smart_str(request.form['Password']))
+    rep = MySQLdb.escape_string(smart_str(request.form['Re-password']))
+    email = MySQLdb.escape_string(smart_str(request.form['Email']))
     if rep == password and email.count("@") == 1:
         if sign_up(user, password, email):
-            mailing_welcome(email, user)
-            return render_template("profile.html", Username=user, followers=0, following=0,
+            if mailing_welcome(email, user):
+                return render_template("profile.html", Username=user, followers=0, following=0,
                                    pic="http://cdn.persiangig.com/preview/APb8Wef9r4/profile-img.jpg")
     return render_template("main-page.html")
 
 
 @app.route('/signin', methods=['POST'])
 def signin():
-    user = MySQLdb.escape_string(request.form['Username'])
-    password = MySQLdb.escape_string(request.form['Password'])
+    user = MySQLdb.escape_string(smart_str(request.form['Username']))
+    password = MySQLdb.escape_string(smart_str(request.form['Password']))
     if sign_in(user, password):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -56,7 +58,7 @@ def asign_up():
 
 @app.route('/post/<string:user>', methods=['POST'])
 def fpost(user):
-    if posting(user, str(request.form['post_text'])):
+    if posting(user, MySQLdb.escape_string(smart_str(request.form['post_text']))):
         follow = len(followers(user))
         followi = len(followings(user))
         posts = foget_post_all(user)
@@ -69,7 +71,7 @@ def fpost(user):
 
 @app.route('/like/<string:user>/<int:pi>', methods=["POST", "GET"])
 def flike(user, pi):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if like_post(pi, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -78,7 +80,7 @@ def flike(user, pi):
 
 @app.route('/dlike/<string:user>/<int:pi>', methods=["POST", "GET"])
 def fdlike(user, pi):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if dislike_post(pi, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -87,8 +89,8 @@ def fdlike(user, pi):
 
 @app.route('/cm/<int:pi>/<string:user>', methods=['POST'])
 def fcm(pi, user):
-    com = MySQLdb.escape_string(request.form['comment'])
-    user = MySQLdb.escape_string(user)
+    com = MySQLdb.escape_string(smart_str(request.form['comment']))
+    user = MySQLdb.escape_string(smart_str(user))
     if commenting(pi, user, com):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -97,7 +99,7 @@ def fcm(pi, user):
 
 @app.route('/h/<string:user>', methods=['POST', 'GET'])
 def fhome(user):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -106,7 +108,7 @@ def fhome(user):
 
 @app.route('/p/<string:user>', methods=['POST', 'GET'])
 def fpro(user):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if get_photo_profile(user):
         follow = len(followers(user))
         followi = len(followings(user))
@@ -120,7 +122,7 @@ def fpro(user):
 
 @app.route('/clike/<string:user>/<int:ci>', methods=['POST', 'GET'])
 def fclike(user, ci):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if like_comment(ci, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -129,7 +131,7 @@ def fclike(user, ci):
 
 @app.route('/cdlike/<string:user>/<int:ci>', methods=['POST', 'GET'])
 def fcdlike(user, ci):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if dislike_comment(ci, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -138,7 +140,7 @@ def fcdlike(user, ci):
 
 @app.route('/rlike/<string:user>/<int:ri>', methods=['POST', 'GET'])
 def frlike(user, ri):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if like_reply(ri, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -147,7 +149,7 @@ def frlike(user, ri):
 
 @app.route('/rdlike/<string:user>/<int:ri>', methods=['POST', 'GET'])
 def frdlike(user, ri):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if dislike_reply(ri, user) or get_photo_profile(user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -156,8 +158,8 @@ def frdlike(user, ri):
 
 @app.route('/rep/<int:ci>/<string:user>/<int:pi>', methods=['POST'])
 def frep(ci, user, pi):
-    rep = MySQLdb.escape_string(request.form['reply'])
-    user = MySQLdb.escape_string(user)
+    rep = MySQLdb.escape_string(smart_str(request.form['reply']))
+    user = MySQLdb.escape_string(smart_str(user))
     if replying(ci, user, pi, rep):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -166,8 +168,8 @@ def frep(ci, user, pi):
 
 @app.route('/ep/<int:pi>/<string:user>', methods=['POST'])
 def fedit_p(pi, user):
-    np = MySQLdb.escape_string(request.form['new_p'])
-    user = MySQLdb.escape_string(user)
+    np = MySQLdb.escape_string(smart_str(request.form['new_p']))
+    user = MySQLdb.escape_string(smart_str(user))
     if edit_post_text(pi, np, user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -176,7 +178,7 @@ def fedit_p(pi, user):
 
 @app.route('/dp/<int:pi>/<string:user>', methods=['GET'])
 def fdel_p(pi, user):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     if delete_post(pi, user):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -190,9 +192,9 @@ def cp():
 
 @app.route('/change_pass', methods=['POST'])
 def ch_pass():
-    user = MySQLdb.escape_string(request.form['Username'])
-    b_pass = MySQLdb.escape_string(request.form['opass'])
-    n_pass = MySQLdb.escape_string(request.form['npass'])
+    user = MySQLdb.escape_string(smart_str(request.form['Username']))
+    b_pass = MySQLdb.escape_string(smart_str(request.form['opass']))
+    n_pass = MySQLdb.escape_string(smart_str(request.form['npass']))
     if update_password(user, b_pass, n_pass):
         posts = fget_post_all(user)
         return render_template("home.html", posts=posts, Username=user)
@@ -206,8 +208,8 @@ def ffp():
 
 @app.route('/mail_p', methods=['POST'])
 def mail_pass():
-    user = MySQLdb.escape_string(request.form['Username'])
-    inf = forget_pass_user(user)
+    user = MySQLdb.escape_string(smart_str(request.form['Username']))
+    inf = forget_pass_user(smart_str(user))
     if inf:
         forget_pass(inf[2], inf[0], inf[1])
     return render_template("main-page.html")
@@ -216,7 +218,7 @@ def mail_pass():
 
 
 def fget_post_all(user):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     posts = get_post_all(user)
     followi = followings(user)
     if len(followi) > 0:
@@ -246,7 +248,7 @@ def fget_post_all(user):
     return posts
 
 def foget_post_all(user):
-    user = MySQLdb.escape_string(user)
+    user = MySQLdb.escape_string(smart_str(user))
     posts = get_post_all(user)
     posts = fdate_sort(posts)
     for post in posts:
