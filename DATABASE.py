@@ -112,7 +112,7 @@ import MySQLdb
 
 
 def sign_up(username, password, email, photo="__empty__"):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "INSERT INTO users VALUES ('%s' , '%s', '%s', '%s')" % (username, password, email, photo)
     flag = False
@@ -132,7 +132,7 @@ def sign_up(username, password, email, photo="__empty__"):
 
 
 def sign_in(username, password):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT username,password FROM users WHERE username = '%s' AND password = '%s'" % (username, password)
     try:
@@ -153,7 +153,7 @@ def sign_in(username, password):
 
 
 def photo_profile(username, photo):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "UPDATE users SET photo = '%s' WHERE username = '%s'" % (photo, username)
     flag = False
@@ -173,7 +173,7 @@ def photo_profile(username, photo):
 
 
 def get_photo_profile(username):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT photo FROM users WHERE username = '%s'" % username
     try:
@@ -192,7 +192,7 @@ def get_photo_profile(username):
 
 
 def un_subscribe(username, password):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "DELETE FROM users WHERE username = '%s' AND password = '%s'" % (username, password)
     flag = False
@@ -212,7 +212,7 @@ def un_subscribe(username, password):
 
 
 def update_password(username, password, new_pass):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT password FROM users WHERE username = '%s'" % username
     flag = False
@@ -246,7 +246,7 @@ def update_password(username, password, new_pass):
 
 
 def posting(username_post, post, photo="__empty__"):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "INSERT INTO posts (username_post,post,date_mod,photo_post) VALUES ('%s' , '%s', NOW(), '%s')" % (username_post, post, photo)
     flag = False
@@ -266,7 +266,7 @@ def posting(username_post, post, photo="__empty__"):
 
 
 def get_post(post_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT post FROM posts WHERE post_id = '%d'" % post_id
     try:
@@ -284,7 +284,7 @@ def get_post(post_id):
 
 
 def get_post_all(username_post):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT * FROM posts WHERE username_post = '%s'" % username_post
     try:
@@ -302,7 +302,7 @@ def get_post_all(username_post):
 
 
 def check_like_post(likepost, like_user):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT * FROM likepost WHERE like_post = '%d' AND like_user = '%s' " % (likepost, like_user)
     try:
@@ -320,7 +320,7 @@ def check_like_post(likepost, like_user):
 
 
 def like_inserter_post(likepost, like_user):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     flag = False
     if check_like_post(likepost, like_user):
@@ -344,7 +344,7 @@ def like_inserter_post(likepost, like_user):
 def like_post(post_id, like_user):
     if check_like_post(post_id, like_user) == False:
         return False
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT likes FROM posts WHERE post_id = '%d'" % post_id
     try:
@@ -372,7 +372,7 @@ def like_post(post_id, like_user):
 def dislike_post(post_id, like_user):
     if check_like_post(post_id, like_user) == False:
         return False
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT dislikes FROM posts WHERE post_id = '%d'" % post_id
     try:
@@ -398,7 +398,7 @@ def dislike_post(post_id, like_user):
 
 
 def get_like_post(post_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT likes FROM posts WHERE post_id = '%d'" % post_id
     try:
@@ -414,7 +414,7 @@ def get_like_post(post_id):
 
 
 def get_dislike_post(post_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT dislikes FROM posts WHERE post_id = '%d'" % post_id
     try:
@@ -430,7 +430,7 @@ def get_dislike_post(post_id):
 
 
 def photo_post(post_id, photo, username_post):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "UPDATE posts SET photo_post = '%s',date_mod = NOW() WHERE post_id = '%d' AND username_post = '%s'" % (photo, post_id, username_post)
     flag = False
@@ -450,7 +450,7 @@ def photo_post(post_id, photo, username_post):
 
 
 def edit_post_text(post_id, new_post, username_post):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "UPDATE posts SET post = '%s',date_mod = NOW() WHERE post_id = '%d' AND username_post = '%s'" % (new_post, post_id, username_post)
     flag = False
@@ -470,7 +470,7 @@ def edit_post_text(post_id, new_post, username_post):
 
 
 def delete_post(post_id, username_post):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "DELETE FROM posts WHERE post_id = '%d' AND username_post = '%s'" % (post_id, username_post)
     flag = False
@@ -494,7 +494,7 @@ def like_post_calculator(post_id):
 
 
 def commenting(comment_post, comment_username, comment):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "INSERT INTO comments (comment_post,comment_username,comment,comment_date) VALUES ('%d' , '%s', '%s', NOW())" % (comment_post, comment_username, comment)
     flag = False
@@ -514,7 +514,7 @@ def commenting(comment_post, comment_username, comment):
 
 
 def get_comment(comment_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT comment FROM comments WHERE comment_id = '%d'" % comment_id
     try:
@@ -532,7 +532,7 @@ def get_comment(comment_id):
 
 
 def get_comment_all(comment_post):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT * FROM comments WHERE comment_post = '%d'" % comment_post
     try:
@@ -550,7 +550,7 @@ def get_comment_all(comment_post):
 
 
 def check_like_comment(like_com, like_user):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT * FROM like_cm WHERE like_com = '%d' AND like_user = '%s' " % (like_com, like_user)
     try:
@@ -568,7 +568,7 @@ def check_like_comment(like_com, like_user):
 
 
 def like_inserter_comment(like_com, like_user):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     flag = False
     if check_like_comment(like_com, like_user):
@@ -592,7 +592,7 @@ def like_inserter_comment(like_com, like_user):
 def like_comment(comment_id, like_user):
     if check_like_comment(comment_id, like_user) == False:
         return False
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT like_cm FROM comments WHERE comment_id = '%d'" % comment_id
     try:
@@ -620,7 +620,7 @@ def like_comment(comment_id, like_user):
 def dislike_comment(comment_id, like_user):
     if check_like_comment(comment_id, like_user) == False:
         return False
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT dislike_cm FROM comments WHERE comment_id = '%d'" % comment_id
     try:
@@ -646,7 +646,7 @@ def dislike_comment(comment_id, like_user):
 
 
 def get_like_comment(comment_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT like_cm FROM comments WHERE comment_id = '%d'" % comment_id
     try:
@@ -662,7 +662,7 @@ def get_like_comment(comment_id):
 
 
 def get_dislike_comment(comment_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT dislike_cm FROM comments WHERE comment_id = '%d'" % comment_id
     try:
@@ -682,7 +682,7 @@ def like_cm_calculator(comment_id):
 
 
 def replying(reply_comment, reply_username, reply_post, reply):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "INSERT INTO replys (reply_comment,reply_username, reply_post,reply,reply_date) VALUES ('%d' , '%s', '%s','%s', NOW())" % (reply_comment, reply_username, reply_post, reply)
     flag = False
@@ -702,7 +702,7 @@ def replying(reply_comment, reply_username, reply_post, reply):
 
 
 def get_reply(reply_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT reply FROM replys WHERE reply_id = '%d'" % reply_id
     try:
@@ -720,7 +720,7 @@ def get_reply(reply_id):
 
 
 def get_reply_all(reply_comment):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT * FROM replys WHERE reply_comment = '%d'" % reply_comment
     try:
@@ -738,7 +738,7 @@ def get_reply_all(reply_comment):
 
 
 def check_like_reply(like_re, like_user):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT * FROM like_re WHERE like_re = '%d' AND like_user = '%s' " % (like_re, like_user)
     try:
@@ -756,7 +756,7 @@ def check_like_reply(like_re, like_user):
 
 
 def like_inserter_reply(like_re, like_user):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     flag = False
     if check_like_reply(like_re, like_user):
@@ -780,7 +780,7 @@ def like_inserter_reply(like_re, like_user):
 def like_reply(reply_id, like_user):
     if check_like_reply(reply_id, like_user) == False:
         return False
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT like_re FROM replys WHERE reply_id = '%d'" % reply_id
     try:
@@ -808,7 +808,7 @@ def like_reply(reply_id, like_user):
 def dislike_reply(reply_id, like_user):
     if check_like_reply(reply_id, like_user) == False:
         return False
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT dislike_re FROM replys WHERE reply_id = '%d'" % reply_id
     try:
@@ -834,7 +834,7 @@ def dislike_reply(reply_id, like_user):
 
 
 def get_like_reply(reply_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT like_re FROM replys WHERE reply_id = '%d'" % reply_id
     try:
@@ -850,7 +850,7 @@ def get_like_reply(reply_id):
 
 
 def get_dislike_reply(reply_id):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT dislike_re FROM replys WHERE reply_id = '%d'" % reply_id
     try:
@@ -872,7 +872,7 @@ def like_re_calculator(reply_id):
 def follow(follower, followed):
     if follower == followed or (followed in followings(follower)):
         return False
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "INSERT INTO follow VALUES ('%s' , '%s')" % (follower, followed)
     flag = False
@@ -892,7 +892,7 @@ def follow(follower, followed):
 
 
 def unfollow(follower, followed):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "DELETE FROM follow WHERE follower = '%s' AND followed = '%s'" % (follower, followed)
     flag = False
@@ -912,7 +912,7 @@ def unfollow(follower, followed):
 
 
 def followers(followed):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT follower FROM follow WHERE followed = '%s'" % followed
     try:
@@ -931,7 +931,7 @@ def followers(followed):
 
 
 def followings(follower):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT followed FROM follow WHERE follower = '%s'" % follower
     try:
@@ -957,7 +957,7 @@ def lister_follow(my_list):
 
 
 def get_users(pattern):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT username,photo FROM users WHERE username LIKE '%s'" % ("%" + pattern + "%")
     try:
@@ -976,7 +976,7 @@ def get_users(pattern):
 
 
 def forget_pass_user(username):
-    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap")
+    db = MySQLdb.connect("localhost", "root", "asoaso7676", "site_ap", use_unicode=True, charset="utf8")
     cursor = db.cursor()
     sql = "SELECT username,password,email FROM users WHERE username = '%s'" %username
     try:
@@ -1090,7 +1090,7 @@ def forget_pass_user(username):
 #print followings('a')
 #print unfollow('a', 'b')
 #print get_post_all('a')
-#print get_comment_all('a',7)
+#print get_comment_all(9)
 #print get_reply_all(3,'a',7)
 #print followings("a")
 #print posting("ww","dvdvdv")
@@ -1103,5 +1103,5 @@ def forget_pass_user(username):
 #print sign_up('wsdvdvvvv','asc','sacwwwsc','sacccccccc')
 
 #print sign_up('wsdvwwdvvvvw','asascc','sacwascwwsc','sacccccccc')
-#print get_users("w")
+#print get_users("a")
 #print forget_pass_user("ww")
