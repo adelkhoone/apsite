@@ -10,3 +10,9 @@ def random_password():
     m.update(tmp2)
     return (str(m.hexdigest()), tmp2)
 
+
+def encryptor(password):
+    m = hashlib.md5()
+    m.update(password)
+    return str(m.hexdigest())
+
