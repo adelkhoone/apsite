@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+
+.button {
+  display: inline-block;
+
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 28px;
+  width: 150px;
+  height: 70px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '?';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover
+span {
+  padding-right: 25px;
+
+}
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.button2 {
+    margin-top: 0.2cm;
+    position: relative;
+    background-color: #4CAF50;
+    border: none;
+    font-size: 15px;
+    color: #FFFFFF;
+    width: 70px;
+    height:30px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.button2:after {
+    content: "";
+    background: #90EE90;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+.button2:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+#info {
+    margin-top:-5.5cm;
+    width:300px;
+    height:300px;
+    border-radius: 500px;
+    background-color: #f2f2f2;
+    padding: 40px;
+
+    box-shadow: 10px 10px 5px rgb(20, 20, 100);;
+    }
+#main {
+    margin-top:4.5cm;
+    width: 600px;
+    background-color: #f2f2f2;
+    border-radius: 50px;
+    padding: 40px;
+    box-shadow: 10px 10px 5px rgb(20, 20, 100);;
+        }
+
+#post-out {
+    margin-top:1cm;
+    width:800px;
+    height:auto;
+    background-color: rgb(112,48,160);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 10px 10px 5px rgb(0,0,0);;
+        }
+
+
+#post-in {
+    width:740px;
+    height:auto;
+    background-color: rgb(255,255,255);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 10px 10px 5px rgb(0,0,0);;
+        }
+
+#post_text{
+    width:200px;
+    height:200px;
+}
+
+body{
+  background-image:url("{{ url_for('static', filename='pictures/profile-bg.jpg') }}");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 500px;
+  background-position: center;
+  background-size: cover;
+
+}
+
+#container{
+    margin-top:0.5cm;
+    margin-right: 12cm;
+}
+
+
+.chip {
+    position: fixed;
+    display: inline-block;
+    padding: 0 25px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+}
+
+.chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+#file-input {
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  filter: alpha(opacity=0); /* IE < 9 */
+  opacity: 0;
+}
+.input-label {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+
+
+
+
+#post_pic-input {
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  filter: alpha(opacity=0); /* IE < 9 */
+  opacity: 0;
+}
+.input-label {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+
+hr{
+  margin:10px 0;
+}
+#search {
+    width: 130px;
+    height: 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+#search:focus {
+    width: 170px;
+}
+
+#search_panel {
+  border-radius: 50px;
+  overflow:scroll;
+  background-color: #f2f2f2;
+  padding: 0px;
+  opacity: 0.8;
+  filter: alpha(opacity=80); @Lyo=@ For IE8 and earlier @Ki8=@
+
+}
+.button4 {
+  width:100px;
+  height:50px;
+  display: inline-block;
+  padding: 1px 2px;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: rgb(100,12,90);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 2px #999;
+}
+
+.button4:hover {background-color: rgb(120,32,120)}
+
+.button4:active {
+  background-color: rgb(200,190,17);
+  box-shadow: 0 3px #666;
+  transform: translateY(4px);
+}
+
+input[type=text] {
+  width: 80px;
+  -webkit-transition: width .35s ease-in-out;
+  transition: width .35s ease-in-out;
+}
+input[type=text]:focus {
+  width: 165px;
+}
+</style>
+<head>
+  <title>Iran Social Network</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Iran Social Network</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#" id="home">Home</a></li>
+        <li class="active"><a href="#" id="profile">Profile</a></li>
+        <li class="active"><a href="#" id="rel">Relations</a></li>
+        <li class="active"><a href="#" id="chp">Change Password</a></li>
+        <li class="active"><a href="#" id="chpi">Change Picture</a></li>
+        <li class="active"><a href="#" id="dea">Delete Account</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li></ul></div></nav>
+<br><div id="search_panel" class="chip" style="border-radius:2px;margin-top:0.1cm;margin:left;height:58px;width:300px;overflow:auto;"><form action="/search" method="post"><textarea name="user" hidden>{{ Username }}</textarea><input type="text" name="search" style = "margin-left:0.2cm;height:30px;" placeholder="search..."><button class='button4'>Search</button></form>
+
+
+</div><br><br><br><div id="search_panel" class="chip" style="border-radius:2px;margin-top:0.1cm;margin:left;height:600px;width:300px;">
+<center><h2>Find Your Friends</h2></center>
+      {% for fr in friends %}
+        <p><form action="/follow" method="post"><textarea name="user" hidden>{{ Username }}</textarea><textarea name="friend" hidden>{{ fr[0] }}</textarea><img src="{{ url_for('static', filename=fr[1]) }}" alt="profile image " style="width:50px;height:50px;border-radius:100px;margin-left:0.3cm;"></img>{{ fr[0] }}</p><center><button class='button4'>Follow</button></form></center><hr>
+      {% endfor %}
+        </div>
+<center>
+<div id="main">
+  <div id="info"><p>
+<label for="file-input" class="input-label">
+  <img src="{{ url_for('static', filename=pic) }}" alt="profile image " style="width:100px;height:100px;border-radius:100px;"><br></img>
+  <input type="file" id="file-input"></label>
+<p style="font-size:20;margin-top:-0.5cm;"><font size="5">{{ OUsername }}</font></p>
+<p style="font-size:20;"><font size="4">Followers | Following</font></p>
+<p style="font-size:20;"><font size="5">{{ Ofollowers }} | {{ Ofollowing }}</font></p>
+</div><meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head><body><div class="container" id="container" style="width: 500px;">
+        <ul id="new_post">
+            {% for post in posts %}
+            <il><center><div id='post-out'><div id='post-in'+{{ post[0] }} align='left' style='width=520px;height:auto;white-space: pre-wrap;word-wrap: break-word'><img src= "{{ url_for('static', filename=post[9]) }}" alt='profile image' style='width:40px;height:40px;border-radius:100px;margin-right:0.1cm;margin-bottom:-0.4cm;margin-top:-0.5cm;'>{{ post[1] }} | </img>{{ post[6] }}<hr><div><img src="{{ url_for('static', filename=post[5]) }}" alt="" style="width:100%;border-radius:20px;"></img>{{ post[2] }}<a href="{{ post[10] }}" target="_blank">{{ post[11] }}</a></div><hr><a href="#" id="{{ post[0] }}" class="lin"><img src="{{ url_for('static', filename='pictures/like.png') }}" alt='like-btn' align='left' style='width:30px;height:30px;border-radius:100px;'></img></a><a href='#' id="{{ post[0] }}" class="dlin"><img src="{{ url_for('static', filename='pictures/dislike.png') }}" alt='dislike-btn' align='left' style='margin-left:0.2cm;margin-right:0.2cm;width:30px;height:30px;border-radius:100px;'></img></a><form action="/cm" method="post"><textarea name="user" hidden>{{ Username }}</textarea><textarea name="post" hidden>{{ post[0] }}</textarea><textarea placeholder='Write Your Comment Here : 'class='form-control' rows='5' id='post_cm' style='width:620px;height:35px' name="comment"></textarea><center><button class='button2' id='send_cm'>Send</button></form><div align='left' style='margin-top: 0.2cm;'>{{ post[3] }} Likes , {{ post[4] }} Dislikes</div><div id='comment' align='right'>{{ post[7] }} Comments</center></il>
+              {% for cms in post[8] %}
+                    <img src="{{ url_for('static', filename=cms[7]) }}" align="left" alt="profile image " style="width:30px;height:30px;border-radius:100px;"></img><p align="left" >{{ cms[2] }} | {{ cms[4] }}</p></img><hr><p align="left" style="margin-left:1cm;">{{ cms[3] }}<br><a href="#" id="{{ cms[0]}}" class="clin"><img src="{{ url_for('static', filename='pictures/like.png') }}" alt='like-btn' align='left' style='width:30px;height:30px;border-radius:100px;'></img></a><a href='#' id="{{ cms[0] }}" class="cdlin"><img src="{{ url_for('static', filename='pictures/dislike.png') }}" alt='dislike-btn' align='left' style='margin-left:0.2cm;margin-right:0.2cm;width:30px;height:30px;border-radius:100px;'></img></a><p>{{ cms[5] }} likes , {{ cms[6] }} dislikes</p><br><form action="/rep" method="post"><center><textarea name="comment" hidden>{{ cms[0] }}</textarea><textarea name="user" hidden>{{ Username }}</textarea><textarea name="post" hidden>{{ post[0] }}</textarea><textarea placeholder='Write Your reply to this comment Here : 'class='form-control' rows='5' id='post_cm' style='width:620px;height:35px' name="reply"></textarea><button class='button2' id='send_cm'>Reply</button></center></form><hr>
+                    {% for rep in cms[8] %}
+                    <img src="{{ url_for('static', filename=rep[8]) }}" align="left" alt="profile image " style="width:30px;height:30px;border-radius:100px;margin-top:-0.2cm;"></img><p align="left" style:"margin-bottom:-1cm;">{{ rep[2] }} | {{ rep[5] }}</p><hr><br><p align="left" style="margin-left:1cm;color:blue;">{{ rep[4] }}<br><a href="#" id="{{ rep[0] }}" class="rlin"><img src="{{ url_for('static', filename='pictures/like.png') }}" alt='like-btn' align='left' style='width:30px;height:30px;border-radius:100px;'></img></a><a href='#' id="{{ rep[0] }}" class="rdlin"><img src="{{ url_for('static', filename='pictures/dislike.png') }}" alt='dislike-btn' align='left' style='margin-left:0.2cm;margin-right:0.2cm;width:30px;height:30px;border-radius:100px;'></img></a><br><p align="right">{{ rep[6] }} likes , {{ rep[7] }} dislikes</p><hr></p>
+                    {% endfor %}
+                {% endfor %}
+            </div></div>
+            {% endfor %}
+ </ul>
+</body><script type="text/javascript">
+var set = true;
+function setcolor() {
+  if (set==false){
+      mybtn = document.getElementById("flw_btn");
+      mybtn.style.backgroundColor = "black";
+      mybtn.style.color = "white";
+      mybtn.value = "follow";
+      set = true;
+  }
+      else if (set==true){
+      mybtn = document.getElementById("flw_btn");
+      mybtn.style.backgroundColor = "green";
+      mybtn.style.color = "white";
+      mybtn.value = "following";
+      set = false;
+  }
+  }
+    function commenting(username,comment,date){
+        var username = username;
+        var comment  = comment;
+        var date = date;
+//        document.getElementById('post-in').appendChild("<img src="profile-img.jpg" align="left" alt="profile image " style="width:30px;height:30px;border-radius:100px;margin-top:-0.2cm;"></img><p align="left" style:"margin-bottom:-1cm;"+username+date+'</p><hr><br><p align="left" style="margin-left:1cm;">'+comment+'<hr style="height:5px;"></p>');
+    }
+$(document).ready(function(){
+    $('#home').click(function(){
+        var user = "{{ Username }}".toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/home';
+                }
+            }
+        };
+        jso.open('POST', '/h', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('username=' + user);
+    })
+    $('#profile').click(function(){
+        var user = "{{ Username }}".toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/pro';
+                }
+            }
+        };
+        jso.open('POST', '/p', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('username=' + user);
+    })
+    $('#chp').click(function(){
+        var user = "{{ Username }}".toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/chp';
+                }
+            }
+        };
+        jso.open('POST', '/change_p', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('username=' + user);
+    })
+    $('#chpi').click(function(){
+        var user = "{{ Username }}".toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/chpi';
+                }
+            }
+        };
+        jso.open('POST', '/change_pic', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('username=' + user);
+    })
+    $('#rel').click(function(){
+        var user = "{{ Username }}".toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/rel';
+                }
+            }
+        };
+        jso.open('POST', '/re', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('username=' + user);
+    })
+    $('#dea').click(function(){
+        var user = "{{ Username }}".toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/fdea';
+                }
+            }
+        };
+        jso.open('POST', '/dea', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('username=' + user);
+    })
+    $('a.lin').click(function(){
+        var user = "{{ Username }}".toString();
+        var pi = $(this).attr('id').toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/like';
+                }
+            }
+        };
+        jso.open('POST', '/li', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('inf=' + user + '/' + pi);
+    })
+    $('a.dlin').click(function(){
+        var user = "{{ Username }}".toString();
+        var pi = $(this).attr('id').toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/dlike';
+                }
+            }
+        };
+        jso.open('POST', '/li', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('inf=' + user + '/' + pi);
+    })
+    $('a.clin').click(function(){
+        var user = "{{ Username }}".toString();
+        var pi = $(this).attr('id').toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/clike';
+                }
+            }
+        };
+        jso.open('POST', '/li', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('inf=' + user + '/' + pi);
+    })
+    $('a.cdlin').click(function(){
+        var user = "{{ Username }}".toString();
+        var pi = $(this).attr('id').toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/cdlike';
+                }
+            }
+        };
+        jso.open('POST', '/li', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('inf=' + user + '/' + pi);
+    })
+    $('a.rlin').click(function(){
+        var user = "{{ Username }}".toString();
+        var pi = $(this).attr('id').toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/rlike';
+                }
+            }
+        };
+        jso.open('POST', '/li', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('inf=' + user + '/' + pi);
+    })
+    $('a.rdlin').click(function(){
+        var user = "{{ Username }}".toString();
+        var pi = $(this).attr('id').toString();
+        var jso = new XMLHttpRequest();
+        jso.onreadystatechange = function(){
+            if(jso.readyState == 4 && jso.status == 200){
+                var server_result = jso.responseText;
+                if(server_result == '1'){
+                    window.location = '/rdlike';
+                }
+            }
+        };
+        jso.open('POST', '/li', true);
+        jso.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        jso.send('inf=' + user + '/' + pi);
+    })
+})
+</script>
+</html>
