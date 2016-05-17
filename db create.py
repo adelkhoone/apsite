@@ -225,16 +225,14 @@ ADD CONSTRAINT `reply_user`
 
 
 CREATE TABLE `site_ap`.`links` (
-  `id_link` INT NOT NULL AUTO_INCREMENT,
+  `id_link` INT NOT NULL,
   `link` VARCHAR(1000) NOT NULL,
-  `name` VARCHAR(100) NOT NULL DEFAULT 'link',
-  PRIMARY KEY (`id_link`),
-  UNIQUE INDEX `id_link_UNIQUE` (`id_link` ASC),
+  `link_name` VARCHAR(100) NULL DEFAULT 'link',
+  INDEX `LREF_idx` (`id_link` ASC),
   CONSTRAINT `LREF`
     FOREIGN KEY (`id_link`)
     REFERENCES `site_ap`.`posts` (`post_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
-
 
 
